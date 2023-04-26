@@ -1,17 +1,27 @@
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class Contacts extends StatefulWidget {
   final String contactName;
+  final String birthdayDate;
   final String photo;
 
-  const Contacts(this.contactName, this.photo, {Key? key}) : super(key: key);
+  Contacts(this.contactName, this.birthdayDate, this.photo, {Key? key})
+      : super(key: key);
 
+  int nivel = 0;
   @override
   State<Contacts> createState() => _ContactsState();
 }
 
 class _ContactsState extends State<Contacts> {
-  int nivel = 0;
+
+
+  bool assetOrNetwork() {
+    if (widget.photo.contains('http')) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +55,14 @@ class _ContactsState extends State<Contacts> {
                       width: 100,
                       height: 100,
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child:
-                          Image.asset(widget.photo, fit: BoxFit.cover)),
+                        borderRadius: BorderRadius.circular(4),
+                        child: assetOrNetwork()
+                            ? Image.asset(widget.photo, fit: BoxFit.cover)
+                            : Image.network(
+                          widget.photo,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                     SizedBox(
                         width: 200,
@@ -63,9 +78,7 @@ class _ContactsState extends State<Contacts> {
                       width: 62,
                       child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              nivel++;
-                            });
+                            setState(() {});
 
                             //print(nivel);
                           },
@@ -92,7 +105,7 @@ class _ContactsState extends State<Contacts> {
                     child: SizedBox(
                       child: LinearProgressIndicator(
                         color: Colors.white,
-                        value: nivel / 10,
+                        value: 0,
                       ),
                       width: 200,
                     ),
@@ -100,7 +113,7 @@ class _ContactsState extends State<Contacts> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'Dia aniversário: $nivel ',
+                      'Dia aniversário: ${widget.nivel}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,

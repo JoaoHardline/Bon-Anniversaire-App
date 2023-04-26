@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bon_aniverssaire_app/components/contacts.dart';
-
+import 'package:bon_aniverssaire_app/screens/form_screen.dart';
+import 'package:bon_aniverssaire_app/data/contacts_inherited.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
@@ -19,32 +19,19 @@ class _InitialScreenState extends State<InitialScreen> {
         leading: Container(),
         title: const Text('Bon Anniversaire App'),
       ),
-      body: AnimatedOpacity(
-        opacity: opacity ? 1 : 0,
-        duration: const Duration(milliseconds: 400),
-        child: ListView(
-          children: const [
-            Contacts('Novo Contato',
-                'assets/images/newcontact.png'),
-            Contacts('João Pedro',
-                'assets/images/caco.webp'),
-            Contacts('Laura Pires',
-                'assets/images/bookopen.jpg'),
-            Contacts('Fernando',
-                'assets/images/meditation.jpeg'),
-            Contacts('Luis',
-                'assets/images/cacogame.jpg'),
-            SizedBox(height: 80,)
-          ],
-        ),
+      body: ListView(
+        children: ContactsInherited.of(context).contactsList,
+        padding: EdgeInsets.only(bottom: 70, top: 8),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            opacity = !opacity;
-          });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (NewContext) => FormScreen(contactsContext: context,),
+              ));
         },
-        child: const Icon(Icons.remove_red_eye),
+        child: const Icon(Icons.add),
       ),
     );
   }
