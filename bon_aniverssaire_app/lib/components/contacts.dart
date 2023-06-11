@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:bon_aniverssaire_app/screens/form_screen.dart';
+import 'dart:io';
 
 class Contacts extends StatefulWidget {
   final String contactName;
   final String birthdayDate;
-  final String photo;
+  File? image = sharedFile;
 
-  Contacts(this.contactName, this.birthdayDate, this.photo, {Key? key})
+  Contacts(this.contactName, this.birthdayDate, {Key? key})
       : super(key: key);
 
   int nivel = 0;
@@ -15,14 +17,14 @@ class Contacts extends StatefulWidget {
 
 class _ContactsState extends State<Contacts> {
 
-
-  bool assetOrNetwork() {
-    if (widget.photo.contains('http')) {
+  File? image = sharedFile;
+  /*bool assetOrNetwork() {
+    if () {
       return false;
     }
     return true;
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -56,12 +58,7 @@ class _ContactsState extends State<Contacts> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: assetOrNetwork()
-                            ? Image.asset(widget.photo, fit: BoxFit.cover)
-                            : Image.network(
-                          widget.photo,
-                          fit: BoxFit.cover,
-                        ),
+                        child: Image.file(image!),
                       ),
                     ),
                     SizedBox(
@@ -79,8 +76,6 @@ class _ContactsState extends State<Contacts> {
                       child: ElevatedButton(
                           onPressed: () {
                             setState(() {});
-
-                            //print(nivel);
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

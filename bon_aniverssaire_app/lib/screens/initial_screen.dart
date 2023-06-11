@@ -35,4 +35,16 @@ class _InitialScreenState extends State<InitialScreen> {
       ),
     );
   }
+
+  Widget checkEmpty(){
+    if(ContactsInherited.of(context).contactsList.isEmpty){
+      return Text('Adicione seu primeiro contato.');
+    }else{
+      return ListView(
+        children: ContactsInherited.of(context).contactsList,
+        padding: EdgeInsets.only(bottom: 70, top: 8),
+      );
+    }
+  }
+
 }

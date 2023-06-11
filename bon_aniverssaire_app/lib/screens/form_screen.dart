@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:bon_aniverssaire_app/data/contacts_inherited.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+File? sharedFile;
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({Key? key, required this.contactsContext}) : super(key: key);
+  FormScreen({Key? key, required this.contactsContext}) : super(key: key);
 
   final BuildContext contactsContext;
 
@@ -17,8 +21,12 @@ class _FormScreenState extends State<FormScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool valueValidator(String? value){
-    if(value != null && value.isEmpty){
+  ImagePicker imagePicker = ImagePicker();
+  File? imageSelected;
+
+
+  bool valueValidator(String? value) {
+    if (value != null && value.isEmpty) {
       return true;
     }
     return false;
@@ -46,6 +54,52 @@ class _FormScreenState extends State<FormScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 128,
+                      height: 128,
+                      child: Column(
+                        //coluna do botao de adc foto
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: FloatingActionButton(
+                              heroTag: null,
+                              onPressed: pickImage,
+                              child: Icon(
+                                Icons.add_photo_alternate_outlined,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: pickImage,
+                            child: Text(
+                              'Adicionar foto',
+                              style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  color: Colors.blueAccent),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      imageSelected == null
+                          ? Container()
+                          : SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: Image.file(imageSelected!)),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -85,55 +139,17 @@ class _FormScreenState extends State<FormScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      keyboardType: TextInputType.url,
-                      controller: imageController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Adicionar uma foto',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 100,
-                    width: 72,
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 2, color: Colors.blueAccent),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imageController.text,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return Image.asset(
-                              'assets/image/standardpicture.jpg');
-                        },
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // print(nameController.text);
-                          // print(birthdayController.text);
-                          // print(imageController.text);
-                          ContactsInherited.of(widget.contactsContext).newContact(nameController.text, birthdayController.text, imageController.text);
+                          ContactsInherited.of(widget.contactsContext)
+                              .newContact(
+                                  nameController.text,
+                                  birthdayController.text,
+                                  imageController.text);
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content:
-                                  Text('Contato Adicionado.')));
+                                  content: Text('Adicionando contato...')));
                           Navigator.pop(context);
                         }
                       },
@@ -146,4 +162,18 @@ class _FormScreenState extends State<FormScreen> {
       ),
     );
   }
+
+  pickImage() async {
+    final PickedFile? temporaryImage =
+        await imagePicker.getImage(source: ImageSource.gallery);
+    if (temporaryImage != null) {
+      setState(() {
+        imageSelected = File(temporaryImage.path);
+        sharedFile = File(temporaryImage.path);
+      });
+    }
+  }
+
+
+
 }
