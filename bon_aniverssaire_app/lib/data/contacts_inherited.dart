@@ -9,7 +9,7 @@ class ContactsInherited extends InheritedWidget {
     required Widget child,
   }) : super(key: key, child: child);
 
-  List<Contacts> contactsList = [];
+  final List<Contacts> contactsList = [];
 
 
   void newContact(String name, String birthdayDate, String photo){
@@ -19,13 +19,13 @@ class ContactsInherited extends InheritedWidget {
 
   static ContactsInherited of(BuildContext context) {
     final ContactsInherited? result =
-    context.dependOnInheritedWidgetOfExactType<ContactsInherited>();
+          context.dependOnInheritedWidgetOfExactType<ContactsInherited>();
     assert(result != null, 'No ContactsInherited found in context');
     return result!;
   }
 
   @override
   bool updateShouldNotify(ContactsInherited oldWidget) {
-    return (oldWidget.contactsList.length != contactsList.length);
+    return oldWidget.contactsList.length != contactsList.length;
   }
 }

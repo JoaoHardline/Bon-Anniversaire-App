@@ -21,7 +21,7 @@ class _InitialScreenState extends State<InitialScreen> {
       ),
       body: ListView(
         children: ContactsInherited.of(context).contactsList,
-        padding: EdgeInsets.only(bottom: 70, top: 8),
+        padding: const EdgeInsets.only(bottom: 70, top: 8),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -38,11 +38,11 @@ class _InitialScreenState extends State<InitialScreen> {
 
   Widget checkEmpty(){
     if(ContactsInherited.of(context).contactsList.isEmpty){
-      return Text('Adicione seu primeiro contato.');
+      return const Text('Adicione seu primeiro contato.');
     }else{
       return ListView(
         children: ContactsInherited.of(context).contactsList,
-        padding: EdgeInsets.only(bottom: 70, top: 8),
+        padding: const EdgeInsets.only(bottom: 70, top: 8),
       );
     }
   }

@@ -6,7 +6,7 @@ import 'dart:io';
 File? sharedFile;
 
 class FormScreen extends StatefulWidget {
-  FormScreen({Key? key, required this.contactsContext}) : super(key: key);
+  const FormScreen({Key? key, required this.contactsContext}) : super(key: key);
 
   final BuildContext contactsContext;
 
@@ -69,7 +69,7 @@ class _FormScreenState extends State<FormScreen> {
                             child: FloatingActionButton(
                               heroTag: null,
                               onPressed: pickImage,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add_photo_alternate_outlined,
                                 size: 50,
                               ),
@@ -77,7 +77,7 @@ class _FormScreenState extends State<FormScreen> {
                           ),
                           GestureDetector(
                             onTap: pickImage,
-                            child: Text(
+                            child: const Text(
                               'Adicionar foto',
                               style: TextStyle(
                                   decoration: TextDecoration.none,
@@ -100,7 +100,7 @@ class _FormScreenState extends State<FormScreen> {
                               child: Image.file(imageSelected!)),
                     ],
                   ),
-                  Padding(
+                  Padding( //NOME
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       validator: (String? value) {
@@ -112,14 +112,14 @@ class _FormScreenState extends State<FormScreen> {
                       keyboardType: TextInputType.name,
                       controller: nameController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Nome',
                         fillColor: Colors.white70,
                         filled: true,
                       ),
                     ),
-                  ),
+                  ),  //Name Padding
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -131,7 +131,7 @@ class _FormScreenState extends State<FormScreen> {
                       keyboardType: TextInputType.datetime,
                       controller: birthdayController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Data de aniversário',
                         fillColor: Colors.white70,
@@ -153,7 +153,7 @@ class _FormScreenState extends State<FormScreen> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text('Adicionar')),
+                      child: const Text('Adicionar')),
                 ],
               ),
             ),

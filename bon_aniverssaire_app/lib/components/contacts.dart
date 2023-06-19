@@ -10,7 +10,7 @@ class Contacts extends StatefulWidget {
   Contacts(this.contactName, this.birthdayDate, {Key? key})
       : super(key: key);
 
-  int nivel = 0;
+  int dia = 0;
   @override
   State<Contacts> createState() => _ContactsState();
 }
@@ -108,7 +108,7 @@ class _ContactsState extends State<Contacts> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'Dia aniversário: ${widget.nivel}',
+                      'Dia aniversário: ${widget.dia}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
