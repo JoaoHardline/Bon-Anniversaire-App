@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:bon_aniverssaire_app/data/contacts_inherited.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
-File? sharedFile;
+import 'package:bon_aniverssaire_app/components/contato.dart';
+import 'package:bon_aniverssaire_app/data/contact_dao.dart';
+import 'package:bon_aniverssaire_app/data/contact_inherited.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({Key? key, required this.contactsContext}) : super(key: key);
+  const FormScreen({Key? key, required this.contactContext}) : super(key: key);
 
-  final BuildContext contactsContext;
+  final BuildContext contactContext;
 
   @override
   State<FormScreen> createState() => _FormScreenState();
@@ -16,18 +14,23 @@ class FormScreen extends StatefulWidget {
 
 class _FormScreenState extends State<FormScreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController birthdayController = TextEditingController();
+  TextEditingController difficultyController = TextEditingController();
   TextEditingController imageController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  ImagePicker imagePicker = ImagePicker();
-  File? imageSelected;
-
-
   bool valueValidator(String? value) {
     if (value != null && value.isEmpty) {
       return true;
+    }
+    return false;
+  }
+
+  bool difficultyValidator(String? value) {
+    if (value != null && value.isEmpty) {
+      if (int.parse(value) > 5 || int.parse(value) < 1) {
+        return true;
+      }
     }
     return false;
   }
@@ -38,7 +41,7 @@ class _FormScreenState extends State<FormScreen> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Novo Contato'),
+          title: const Text('Novo Aniversariante'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -48,112 +51,112 @@ class _FormScreenState extends State<FormScreen> {
               decoration: BoxDecoration(
                 color: Colors.black12,
                 borderRadius: BorderRadius.circular(10),
-                //border: Border.all(width: 1),
+
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 128,
-                      height: 128,
-                      child: Column(
-                        //coluna do botao de adc foto
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: FloatingActionButton(
-                              heroTag: null,
-                              onPressed: pickImage,
-                              child: const Icon(
-                                Icons.add_photo_alternate_outlined,
-                                size: 50,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: pickImage,
-                            child: const Text(
-                              'Adicionar foto',
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  color: Colors.blueAccent),
-                            ),
-                          )
-                        ],
+                  Container(
+                    height: 100,
+                    width: 72,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 2, color: Colors.blue),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        imageController.text,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Image.asset('..\assets\images');
+                        },
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      imageSelected == null
-                          ? Container()
-                          : SizedBox(
-                              width: 200,
-                              height: 200,
-                              child: Image.file(imageSelected!)),
-                    ],
-                  ),
-                  Padding( //NOME
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       validator: (String? value) {
                         if (valueValidator(value)) {
-                          return 'Insira o nome do Aniversariante.';
+                          return 'Insira o nome do Aniversariante';
                         }
                         return null;
                       },
-                      keyboardType: TextInputType.name,
                       controller: nameController,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Nome',
                         fillColor: Colors.white70,
                         filled: true,
                       ),
                     ),
-                  ),  //Name Padding
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       validator: (value) {
-                        if (valueValidator(value)) {
-                          return 'Insira uma data válida';
+                        if (difficultyValidator(value)) {
+                          return 'Insira um Dificuldade entre 1 e 5';
                         }
+                        return null;
                       },
-                      keyboardType: TextInputType.datetime,
-                      controller: birthdayController,
+                      keyboardType: TextInputType.number,
+                      controller: difficultyController,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Data de aniversário',
+                        hintText: 'Data',
+                        fillColor: Colors.white70,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      onChanged: (text) {
+                        setState(() {});
+                      },
+                      validator: (value) {
+                        if (valueValidator(value)) {
+                          return 'Insira um URL de Imagem!';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.url,
+                      controller: imageController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Imagem',
                         fillColor: Colors.white70,
                         filled: true,
                       ),
                     ),
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ContactsInherited.of(widget.contactsContext)
-                              .newContact(
-                                  nameController.text,
-                                  birthdayController.text,
-                                  imageController.text);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Adicionando contato...')));
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text('Adicionar')),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+
+                        ContactDao().save(Contact(
+                            nameController.text,
+                            imageController.text,
+                            int.parse(difficultyController.text)));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Aniversariante adicionado! atualize a página.'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text('Adicionar!'),
+                  ),
                 ],
               ),
             ),
@@ -162,18 +165,4 @@ class _FormScreenState extends State<FormScreen> {
       ),
     );
   }
-
-  pickImage() async {
-    final PickedFile? temporaryImage =
-        await imagePicker.getImage(source: ImageSource.gallery);
-    if (temporaryImage != null) {
-      setState(() {
-        imageSelected = File(temporaryImage.path);
-        sharedFile = File(temporaryImage.path);
-      });
-    }
-  }
-
-
-
 }

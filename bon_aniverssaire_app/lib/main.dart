@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bon_aniverssaire_app/data/contacts_inherited.dart';
+import 'package:bon_aniverssaire_app/data/contact_inherited.dart';
 import 'package:bon_aniverssaire_app/screens/initial_screen.dart';
 
 void main() {
@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  ContactsInherited(child: const InitialScreen()),
+      home: ContactInherited(child: const InitialScreen()),
     );
   }
 }
+
+
+
+
+
+
+
