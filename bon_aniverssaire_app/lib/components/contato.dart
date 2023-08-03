@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:bon_aniverssaire_app/components/difficulty.dart';
 import 'package:bon_aniverssaire_app/data/contact_dao.dart';
@@ -20,12 +21,15 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
-  bool assetOrNetwork() {
-    if (widget.foto.contains('http')) {
-      return false;
+  bool PickedImage() {
+    if (widget.foto.isNotEmpty) {
+      return true;
     }
-    return true;
+    return false;
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +62,7 @@ class _ContactState extends State<Contact> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: assetOrNetwork()
+                        child: PickedImage()
                             ? Image.asset(
                           widget.foto,
                           fit: BoxFit.cover,

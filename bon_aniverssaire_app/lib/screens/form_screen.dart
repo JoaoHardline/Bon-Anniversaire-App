@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:bon_aniverssaire_app/components/contato.dart';
 import 'package:bon_aniverssaire_app/data/contact_dao.dart';
 import 'package:bon_aniverssaire_app/data/contact_inherited.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({Key? key, required this.contactContext}) : super(key: key);
@@ -15,8 +17,10 @@ class FormScreen extends StatefulWidget {
 class _FormScreenState extends State<FormScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController difficultyController = TextEditingController();
-  TextEditingController imageController = TextEditingController();
 
+  //TextEditingController imageController = TextEditingController();
+
+  File? _selectedImage = null; // armazena o arquivo da imagem selecionada.
   final _formKey = GlobalKey<FormState>();
 
   bool valueValidator(String? value) {
@@ -51,15 +55,14 @@ class _FormScreenState extends State<FormScreen> {
               decoration: BoxDecoration(
                 color: Colors.black12,
                 borderRadius: BorderRadius.circular(10),
-
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: 100,
-                    width: 72,
+                    height: 200,
+                    width: 144,
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(10),
@@ -67,15 +70,16 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imageController.text,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return Image.asset('..\assets\images');
-                        },
-                        fit: BoxFit.cover,
-                      ),
+                      child: _selectedImage != null
+                          ? Image.file(_selectedImage!, fit: BoxFit.cover)
+                          : Icon(Icons.account_circle, size: 100),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: ElevatedButton(
+                        onPressed: _pickImageFromGallery,
+                        child: Text('Adicionar foto do aniversariante')),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -116,40 +120,17 @@ class _FormScreenState extends State<FormScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (valueValidator(value)) {
-                          return 'Insira um URL de Imagem!';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.url,
-                      controller: imageController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Imagem',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
-                    ),
-                  ),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-
                         ContactDao().save(Contact(
                             nameController.text,
-                            imageController.text,
+                            _selectedImage.toString(),
                             int.parse(difficultyController.text)));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Aniversariante adicionado! atualize a página.'),
+                            content: Text(
+                                'Aniversariante adicionado! atualize a página.'),
                           ),
                         );
                         Navigator.pop(context);
@@ -164,5 +145,14 @@ class _FormScreenState extends State<FormScreen> {
         ),
       ),
     );
+  }
+
+  Future _pickImageFromGallery() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnedImage == null) return;
+    setState(() {
+      _selectedImage = File(returnedImage!.path);
+    });
   }
 }

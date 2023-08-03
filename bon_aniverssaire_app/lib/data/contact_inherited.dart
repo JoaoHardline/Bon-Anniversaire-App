@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:bon_aniverssaire_app/components/contato.dart';
 
@@ -7,10 +8,10 @@ class ContactInherited extends InheritedWidget {
     required Widget child,
   }) : super(key: key, child: child);
 
-  final List<Contact> taskList = [];
+  final List<Contact> contactList = [];
 
   void newContact(String name, String photo,int date){
-    taskList.add(Contact(name, photo, date));
+    contactList.add(Contact(name, photo, date));
   }
 
   static ContactInherited of(BuildContext context) {
@@ -22,6 +23,6 @@ class ContactInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(ContactInherited oldWidget) {
-    return oldWidget.taskList.length != taskList.length;
+    return oldWidget.contactList.length != contactList.length;
   }
 }
