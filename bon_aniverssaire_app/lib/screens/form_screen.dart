@@ -125,7 +125,7 @@ class _FormScreenState extends State<FormScreen> {
                       if (_formKey.currentState!.validate()) {
                         ContactDao().save(Contact(
                             nameController.text,
-                            _selectedImage.toString(),
+                            imagem,
                             int.parse(difficultyController.text)));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -147,12 +147,14 @@ class _FormScreenState extends State<FormScreen> {
     );
   }
 
+  String imagem = '';
   Future _pickImageFromGallery() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnedImage == null) return;
     setState(() {
       _selectedImage = File(returnedImage!.path);
+      imagem = returnedImage.path;
     });
   }
 }

@@ -11,9 +11,12 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         leading: Container(),
         actions: [
@@ -74,7 +77,6 @@ class _InitialScreenState extends State<InitialScreen> {
                     return Center(
                         child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      // não implementado em vídeo por descuido meu, desculpem.
                       crossAxisAlignment: CrossAxisAlignment.center,
                       // essa linha de layout deixa o conteudo totalmente centralizado.
                       children: const [
@@ -111,4 +113,8 @@ class _InitialScreenState extends State<InitialScreen> {
       ),
     );
   }
+
+
+
+
 }

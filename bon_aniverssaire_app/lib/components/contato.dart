@@ -63,10 +63,7 @@ class _ContactState extends State<Contact> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: PickedImage()
-                            ? Image.asset(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        )
+                            ? Image.file(File(widget.foto!))
                             : Image.network(
                           widget.foto,
                           fit: BoxFit.cover,
