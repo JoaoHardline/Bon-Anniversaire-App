@@ -2,7 +2,7 @@
     package="com.example.bon_aniverssaire_app">
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
    <application
-        android:label="bon_aniverssaire_app"
+        android:label="Bon Anniversaire!"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
