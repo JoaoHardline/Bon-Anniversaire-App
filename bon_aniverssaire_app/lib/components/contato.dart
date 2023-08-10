@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:bon_aniverssaire_app/components/difficulty.dart';
 import 'package:bon_aniverssaire_app/data/contact_dao.dart';
 
 class Contact extends StatefulWidget {
@@ -64,10 +63,8 @@ class _ContactState extends State<Contact> {
                         borderRadius: BorderRadius.circular(4),
                         child: PickedImage()
                             ? Image.file(File(widget.foto!))
-                            : Image.network(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        ),
+                            : Container(
+                            child: Icon(Icons.account_box_rounded, size: 48, )),
                       ),
                     ),
                     Column(
@@ -83,18 +80,12 @@ class _ContactState extends State<Contact> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             )),
-                        Difficulty(
-                          dificultyLevel: widget.data,
-                        ),
                       ],
                     ),
                     SizedBox(
-                      height: 52,
-                      width: 52,
+                      height: 62,
+                      width: 62,
                       child: ElevatedButton(
-                          onLongPress: () {
-                            removeContact(context);
-                          },
                           onPressed: () {
                             //versao final dever abrir nova pagina com novos botoes de edição (deletar, update nome/data/foto)
                             print(widget.dias);
@@ -114,7 +105,8 @@ class _ContactState extends State<Contact> {
                               )
                             ],
                           )),
-                    )
+                    ),
+                    SizedBox(width: 1,)
                   ],
                 ),
               ),

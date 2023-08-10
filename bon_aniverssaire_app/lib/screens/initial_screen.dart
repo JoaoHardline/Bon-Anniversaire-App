@@ -11,8 +11,6 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +69,51 @@ class _InitialScreenState extends State<InitialScreen> {
                           itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {
                             final Contact contato = items[index];
-                            return contato;
+                            return Dismissible(
+                                key: UniqueKey(),
+                                direction: DismissDirection.startToEnd,
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    items.removeAt(index);
+                                    ContactDao().delete(contato.nome);
+                                  });
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Aniversariante removido')));
+                                },
+                                background: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 50,
+                                    color: Color(0xFFFF5E6C),
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              size: 46,
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                            Text(
+                                              'Remover Aniversariante',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                child: contato);
                           });
                     }
                     return Center(
@@ -113,8 +155,4 @@ class _InitialScreenState extends State<InitialScreen> {
       ),
     );
   }
-
-
-
-
 }

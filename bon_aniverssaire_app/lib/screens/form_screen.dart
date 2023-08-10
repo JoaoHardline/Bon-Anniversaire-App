@@ -44,6 +44,7 @@ class _FormScreenState extends State<FormScreen> {
     return Form(
       key: _formKey,
       child: Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
           title: const Text('Novo Aniversariante'),
         ),
@@ -53,7 +54,7 @@ class _FormScreenState extends State<FormScreen> {
               height: 650,
               width: 375,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -64,25 +65,29 @@ class _FormScreenState extends State<FormScreen> {
                     height: 200,
                     width: 144,
                     decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Colors.black26,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 2, color: Colors.blue),
+                      border: Border.all(width: 2, color: Colors.transparent),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: _selectedImage != null
                           ? Image.file(_selectedImage!, fit: BoxFit.cover)
-                          : Icon(Icons.account_circle, size: 100),
+                          : Container(
+                              child: Icon(
+                              Icons.account_box_rounded,
+                              size: 96,
+                            )),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: ElevatedButton(
                         onPressed: _pickImageFromGallery,
-                        child: Text('Adicionar foto do aniversariante')),
+                        child: Text('Selecionar foto do aniversariante')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(32.0),
                     child: TextFormField(
                       validator: (String? value) {
                         if (valueValidator(value)) {
@@ -93,7 +98,7 @@ class _FormScreenState extends State<FormScreen> {
                       controller: nameController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        //border: OutlineInputBorder(),
                         hintText: 'Nome',
                         fillColor: Colors.white70,
                         filled: true,
@@ -101,7 +106,7 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(32.0),
                     child: TextFormField(
                       validator: (value) {
                         if (difficultyValidator(value)) {
@@ -113,7 +118,7 @@ class _FormScreenState extends State<FormScreen> {
                       controller: difficultyController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        //border: OutlineInputBorder(),
                         hintText: 'Data',
                         fillColor: Colors.white70,
                         filled: true,
@@ -123,20 +128,20 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ContactDao().save(Contact(
-                            nameController.text,
-                            imagem,
-                            int.parse(difficultyController.text)));
+                        setState(() {
+                          ContactDao().save(Contact(nameController.text, imagem,
+                              int.parse(difficultyController.text)));
+                        });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
                                 'Aniversariante adicionado! atualize a página.'),
                           ),
                         );
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       }
                     },
-                    child: Text('Adicionar!'),
+                    child: Text('Adicionar'),
                   ),
                 ],
               ),
@@ -148,6 +153,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   String imagem = '';
+
   Future _pickImageFromGallery() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
