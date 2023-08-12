@@ -6,12 +6,10 @@ class Contact extends StatefulWidget {
   final String nome;
   final String foto;
   final int data;
-  int dias;
 
   Contact(this.nome,
       this.foto,
       this.data, [
-        this.dias = 0,
         Key? key,
       ]) : super(key: key);
 
@@ -38,7 +36,7 @@ class _ContactState extends State<Contact> {
         children: [
           Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4), color: Colors.blue),
+                borderRadius: BorderRadius.circular(4), color: Colors.indigo),
             height: 140,
           ),
           Column(
@@ -88,12 +86,7 @@ class _ContactState extends State<Contact> {
                       child: ElevatedButton(
                           onPressed: () {
                             //versao final dever abrir nova pagina com novos botoes de edição (deletar, update nome/data/foto)
-                            print(widget.dias);
-                            setState(() {
-                              widget.dias++;
-                            });
-                            // print(nivel);
-                          },
+                            },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -119,7 +112,7 @@ class _ContactState extends State<Contact> {
                       child: LinearProgressIndicator(
                         color: Colors.white,
                         value: (widget.data > 0)
-                            ? (widget.dias / widget.data) / 10
+                            ? 1 - (widget.data / 360)
                             : 1,
                       ),
                       width: 200,
@@ -128,7 +121,7 @@ class _ContactState extends State<Contact> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'Faltam: ${widget.dias} dias',
+                      'Faltam: ${widget.data} dias',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   )

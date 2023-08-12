@@ -9,7 +9,7 @@ class ContactInherited extends InheritedWidget {
   }) : super(key: key, child: child);
 
   final List<Contact> contactList = [];
-
+  int? atualizador;
   void newContact(String name, String photo,int date){
     contactList.add(Contact(name, photo, date));
   }

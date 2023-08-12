@@ -1,3 +1,4 @@
+import 'package:bon_aniverssaire_app/data/contact_inherited.dart';
 import 'package:flutter/material.dart';
 import 'package:bon_aniverssaire_app/components/contato.dart';
 import 'package:bon_aniverssaire_app/data/contact_dao.dart';
@@ -147,9 +148,7 @@ class _InitialScreenState extends State<InitialScreen> {
                 contactContext: context,
               ),
             ),
-          ).then((value) => setState(() {
-                print('Recarregando a tela inicial');
-              }));
+          ).whenComplete(() => {setState(() {})});
         },
         child: const Icon(Icons.add),
       ),

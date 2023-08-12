@@ -39,6 +39,24 @@ class _FormScreenState extends State<FormScreen> {
     return false;
   }
 
+  DateTime _dateTime = DateTime.now();
+  Duration? difference;
+  DateTime currentDate = DateTime.now(); //apenas inicializando a variavel
+  DateTime nextBirthday = DateTime.now(); //apenas inicializando a variavel
+
+  void _showDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1899),
+            lastDate: DateTime.now())
+        .then((value) {
+      setState(() {
+        _dateTime = value!;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -88,6 +106,7 @@ class _FormScreenState extends State<FormScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(32.0),
+                    //TEXTO DO NOME
                     child: TextFormField(
                       validator: (String? value) {
                         if (valueValidator(value)) {
@@ -106,31 +125,43 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   ),
                   Padding(
+                    //PADDING DA DATA
                     padding: const EdgeInsets.all(32.0),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (difficultyValidator(value)) {
-                          return 'Insira um Dificuldade entre 1 e 5';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.number,
-                      controller: difficultyController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        //border: OutlineInputBorder(),
-                        hintText: 'Data',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        //display chosen data
+                        Text(
+                          _dateTime != null
+                              ? '${_dateTime.day.toString()} / ${_dateTime.month.toString()} / ${_dateTime.year.toString()}'
+                              : 'Data não selecionada',
+                          style: TextStyle(fontSize: 20),
+                        ),
+
+                        //button
+                        ElevatedButton(
+                          onPressed: _showDatePicker,
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: Text(
+                              'Alterar data de nascimento',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        nextBirthday = DateTime(currentDate.year, _dateTime.month, _dateTime.day);
+                        difference = DateTime.now().difference(nextBirthday).abs();
                         setState(() {
                           ContactDao().save(Contact(nameController.text, imagem,
-                              int.parse(difficultyController.text)));
+                              difference!.inDays + 1));
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
