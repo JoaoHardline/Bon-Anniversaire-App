@@ -26,7 +26,7 @@ class _InitialScreenState extends State<InitialScreen> {
             icon: const Icon(Icons.refresh),
           ),
         ],
-        title: const Text('Bon-Anniverssaire App'),
+        title: const Text('Bon-Anniversaire App'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),

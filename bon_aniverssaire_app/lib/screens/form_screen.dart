@@ -39,7 +39,7 @@ class _FormScreenState extends State<FormScreen> {
     return false;
   }
 
-  DateTime _dateTime = DateTime.now();
+  DateTime selectedDate = DateTime.now();
   Duration? difference;
   DateTime currentDate = DateTime.now(); //apenas inicializando a variavel
   DateTime nextBirthday = DateTime.now(); //apenas inicializando a variavel
@@ -52,7 +52,7 @@ class _FormScreenState extends State<FormScreen> {
             lastDate: DateTime.now())
         .then((value) {
       setState(() {
-        _dateTime = value!;
+        selectedDate = value!;
       });
     });
   }
@@ -133,8 +133,8 @@ class _FormScreenState extends State<FormScreen> {
                       children: [
                         //display chosen data
                         Text(
-                          _dateTime != null
-                              ? '${_dateTime.day.toString()} / ${_dateTime.month.toString()} / ${_dateTime.year.toString()}'
+                          selectedDate != null
+                              ? '${selectedDate.day.toString()} / ${selectedDate.month.toString()} / ${selectedDate.year.toString()}'
                               : 'Data não selecionada',
                           style: TextStyle(fontSize: 20),
                         ),
@@ -157,7 +157,10 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        nextBirthday = DateTime(currentDate.year, _dateTime.month, _dateTime.day);
+                        nextBirthday = DateTime(currentDate.year, selectedDate.month, selectedDate.day);
+                        if(nextBirthday.isBefore(currentDate) || nextBirthday.isAtSameMomentAs(currentDate)) {
+                          nextBirthday = DateTime(currentDate.year + 1, selectedDate.month, selectedDate.day);
+                        }
                         difference = DateTime.now().difference(nextBirthday).abs();
                         setState(() {
                           ContactDao().save(Contact(nameController.text, imagem,
